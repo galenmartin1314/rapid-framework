@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+[#include "../include.html" /]
+<title>${appName}-数据表</title>
+</head>
+<body>
+	
+	<label style="font-size:12px;">数据表：</label><select id="table" name="table" class="easyui-combobox" width="200px;">
+		[#list table as t]
+		<option value="${t.value}">${t.text}</option>
+		[/#list]
+	</select><br/><br/>
+	<table id="tableDefine" class="easyui-datagrid" title="Load Data"
+		iconCls="icon-save">
+		<thead>
+			<tr>
+				<th field="column_name" width="100"><b>字段名称</b></th>
+				<th field="data_type" width="100"><b>数据类型</b></th>
+				<th field="decimal_digits" width="100"><b>数据长度</b></th>
+				<th field="nullable" width="100"><b>可否为空</b></th>
+				<th field="cmment" width="150"><b>字段描述</b></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+<script type="text/javascript">
+$(function(){
+	$('#table').combobox({
+		onSelect: function(record){
+			$('#tableDefine').datagrid("load",{
+				url="/tables/"+record.value+".ghtml"
+			});
+		}
+	});
+});
+</script>
+</html>
