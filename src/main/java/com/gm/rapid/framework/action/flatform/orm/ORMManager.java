@@ -27,13 +27,24 @@ import com.gm.rapid.framework.widget.ComboBox;
 @RequestMapping(value="/flatform/orm")
 public class ORMManager extends BaseController {
 	/**
-	 * 
-	 * @param request HttpServletRequest实例
-	 * @return 所有数据表
-	 * @throws Exception
+	 * 简单页面跳转
+	 * @return 
 	 */
-	@RequestMapping(value="/tables")
-	public String tables(HttpServletRequest request) throws Exception{
+	@RequestMapping(value="/*")
+	public String gotoPage(HttpServletRequest request){
+		System.out.println(request.getRequestURI().split("/flatform/orm")[1]);
+		return "/flatform/orm/tables";
+	}
+	
+	@RequestMapping("/tables/${tbname}")
+	@ResponseBody
+	public void getTable(@PathVariable String tbname){
+		System.out.println(tbname);
+	}
+	
+	@RequestMapping(value="/listtable")
+	@ResponseBody
+	public Object listtable() throws Exception{
 		URL url = getClass().getClassLoader().getResource("jdbc.properties");
 		InputStream in = new FileInputStream(url.getFile());
 		Properties properties = new Properties();
@@ -48,13 +59,6 @@ public class ORMManager extends BaseController {
 			table.add(new ComboBox(tables.getString("TABLE_NAME"),tables.getString("TABLE_NAME")));
 		}
 		conn.close();
-		request.setAttribute("table", table);
-		return "/flatform/orm/tables";
-	}
-	
-	@RequestMapping("/tables/${tbname}")
-	@ResponseBody
-	public void getTable(@PathVariable String tbname){
-		System.out.println(tbname);
+		return table;
 	}
 }
